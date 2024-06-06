@@ -114,6 +114,13 @@ This extension adds support for Server Sent Events to htmx.  See /www/extensions
           if (!api.triggerEvent(elt, 'htmx:sseBeforeMessage', event)) {
             return
           }
+          // certain message types need to be decoded
+          if (event.type.startsWith('message_update_')) {
+            swap(child, decodeURIComponent(event.data))
+          }
+          else {
+            swap(child, event.data)
+          }
           swap(elt, event.data)
           api.triggerEvent(elt, 'htmx:sseMessage', event)
         }
